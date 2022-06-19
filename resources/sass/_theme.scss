@@ -1,0 +1,250 @@
+/**
+Font
+ */
+$hacker-font: Menlo, Monaco, Consolas, "Courier New", monospace !important;
+
+body {
+    font-family: $hacker-font;
+}
+
+
+/**
+Barvy
+ */
+
+$hacker: lime;
+$hacker-bg: #1d1d1d;
+
+* {
+    color: $hacker;
+}
+
+h1, h2, h3, h4 {
+    color: $hacker;
+}
+
+
+h1 {
+    text-transform: uppercase;
+}
+
+
+h2 {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    text-decoration: underline;
+}
+
+
+html, body {
+    background-color: $hacker-bg;
+}
+
+
+/**
+Zákaz selekce
+ */
+* {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select:   none; /* Safari */
+    -khtml-user-select:    none; /* Konqueror HTML */
+    -moz-user-select:      none; /* Firefox */
+    -ms-user-select:       none; /* Internet Explorer/Edge */
+    user-select:           none;
+    /* Non-prefixed version, currently
+                                     supported by Chrome and Opera */
+}
+
+
+/**
+Table
+ */
+.table-bordered, table, td, tr, th {
+    border: $hacker 1px solid !important;
+
+    color:  $hacker;
+}
+
+
+td, th {
+    padding: 0.5rem 1rem;
+}
+
+
+/**
+Select box
+ */
+select, select:focus {
+    background-color: $hacker-bg;
+    color:            lime;
+    border:           none;
+}
+
+
+/**
+Layout
+ */
+.container {
+    margin-top: 5rem;
+}
+
+
+.page-header {
+    border-bottom: $hacker 2px solid;
+    margin-bottom: 1rem;
+}
+
+
+.btn-primary {
+    background:     transparent;
+    color:          $hacker !important;
+
+    font-family:    $hacker-font;
+    text-transform: uppercase;
+
+    border:         $hacker solid 1px;
+
+    margin-bottom:  0.8rem;
+
+    &:hover {
+        background-color: $hacker;
+        color:            $hacker-bg !important;
+        border:           $hacker 1px solid;
+    }
+}
+
+.btn-secondary {
+    background:     transparent;
+    color:          #c4293c !important;
+
+    font-family:    $hacker-font;
+    text-transform: uppercase;
+
+    border:         #c4293c solid 1px;
+
+    margin-bottom:  0.8rem;
+
+    &:hover {
+        background-color: #c4293c;
+        color:            $hacker-bg !important;
+        border:           #c4293c 1px solid;
+    }
+}
+
+
+// Inputy bez okrajů a pozadí
+input {
+    background-color: transparent;
+    border:           none;
+    color:            $hacker;
+
+    &:focus, &:hover {
+        outline: none;
+    }
+}
+
+
+/**
+Alert o přístupu
+ */
+.access-alert {
+    padding:        100px 100px;
+
+    position:       fixed;
+    top:            calc(50% - 100px);
+    left:           calc(50% - 215px);
+
+    font-size:      25px;
+    text-transform: uppercase;
+    color:          white;
+
+    opacity:        0;
+
+    transition:     0.8s opacity;
+}
+
+
+.access-green {
+    border:           #34804e 15px solid;
+    background-color: #1c7430;
+}
+
+
+.access-red {
+    border:           #802015 15px solid;
+    background-color: #742b1c;
+}
+
+
+/**
+Fulscreen alerty
+ */
+#alert-container {
+    transition: opacity linear 1s;
+}
+
+.alert-fullscreen {
+    position:        fixed;
+
+    display:         flex;
+    justify-content: center;
+    align-items:     center;
+
+    height:          100%;
+    width:           100%;
+    top:             0;
+    left:            0;
+
+    font-size:       100px;
+
+    opacity:         0;
+
+    .caption {
+        color:          white;
+
+        text-transform: uppercase;
+    }
+
+}
+
+
+$fullscreen-alert-border-size: 30px;
+
+.alert-fullscreen.blue {
+    background-color: #2b52ff;
+    border:           $fullscreen-alert-border-size solid blue;
+}
+
+
+.alert-fullscreen.green {
+    background-color: #3dc81f;
+    border:           $fullscreen-alert-border-size solid #00ff0e;
+}
+
+
+.alert-fullscreen.red {
+    background-color: #ff3722;
+    border:           $fullscreen-alert-border-size solid #ff0000;
+
+    animation:        alert-blinking 2s infinite;
+}
+
+
+@keyframes alert-blinking {
+
+    0% {
+        background-color: #ff0000;
+        border:           $fullscreen-alert-border-size solid #ffa10e;
+    }
+
+    50% {
+        background-color: #ffa10e;
+        border:           $fullscreen-alert-border-size solid #ff0000;
+    }
+
+    100% {
+        background-color: #ff0000;
+        border:           $fullscreen-alert-border-size solid #ffa10e;
+    }
+
+}

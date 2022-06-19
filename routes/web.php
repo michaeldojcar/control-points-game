@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GameController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,9 +15,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Game admin GUI
-Route::get('/', 'ControlPointsController@renderOperator')->name('controlPoints.operator');
-Route::get('/games', 'ControlPointsController@renderGames')->name('controlPoints.games');
-Route::get('/game/{id}', 'ControlPointsController@renderGame')->name('controlPoints.game');
+Route::get('/', [GameController::class, 'renderOperator'])->name('controlPoints.operator');
+Route::get('/games', [GameController::class, 'renderGames'])->name('controlPoints.games');
+Route::get('/game/{id}', [GameController::class, 'renderGame'])->name('controlPoints.game');
 
 // API routes
 // TODO: move to api.php
