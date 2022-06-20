@@ -75,4 +75,12 @@ class Game extends Model
             return $this->started_at->diffInSeconds(Carbon::now());
         }
     }
+
+
+    public static function getCurrentGame()
+    {
+        return self::where('status', '!=', self::STATUS_FORCE_EXITED)
+            ->where('status', '!=', self::STATUS_FINISHED)
+            ->first();
+    }
 }

@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Sound extends Model
 {
     use HasFactory;
+
+    protected $table = 'sound_queue';
 }

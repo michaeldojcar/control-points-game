@@ -37,8 +37,6 @@
 
 
             <div v-if="internal_state === 'finished'">
-                <p>{{game.seconds_elapsed,}}</p>
-
                 <h5>Skóre</h5>
                 <table class="table table-bordered">
                     <tbody>
@@ -82,10 +80,30 @@
                         </div>
                     </div>
 
+                    <div v-if="internal_state === 'finished'">
+                        <a href="/">Návrat na seznam her</a>
+                    </div>
+
                     <a @click="forceQuitGame"
                        v-if="game.status !== 'force_ended' && game.status !== 'finished'">Vynutit ukončení hry</a>
 
 
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-header">
+                    Kontrolní body
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <tbody>
+                        <tr v-for="point in control_points">
+                            <td>{{ point.name }}</td>
+                            <td>{{ point.ownerName || '-' }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -99,6 +117,7 @@ export default {
     data() {
         return {
             game: {},
+            control_points: [],
             bg_audio: 1,
 
             // Music objects
@@ -141,7 +160,14 @@ export default {
                 .then(response => {
                     this.game = response.data;
 
-                    this.changeAndProceedInternalState(response.data.status)
+                    if (response.data.status !== this.internal_state) {
+                        this.changeAndProceedInternalState(response.data.status)
+                    }
+                })
+
+            axios.get('/api/control-points')
+                .then(response => {
+                    this.control_points = response.data
                 })
         },
 
@@ -217,10 +243,6 @@ export default {
                 this.sendStatusToServer('playing')
                 this.changeAndProceedInternalState('playing')
 
-                setInterval(function () {
-                    // TODO: Announcement
-                }, 3000);
-
                 return true;
             }, 43068);
         },
@@ -230,6 +252,11 @@ export default {
             if (this.timer === null) {
                 this.startTimerByServerStart()
             }
+
+            setInterval(() => {
+                // Přehrávání hlášek
+                this.playCurrentAnnouncement();
+            }, 3000);
         },
 
         statusCountdown() {
@@ -282,6 +309,50 @@ export default {
                     this.backgroundAudio.pause();
                 }
             }, 50);
+        },
+
+        playCurrentAnnouncement() {
+            axios.get('/api/games/' + this.game_id + '/audio')
+                .then(response => {
+                    if (!response.data) {
+                        console.debug('Žádná hláška k přehrání.')
+                    }
+                    else {
+                        this.announcementAudio.src = '/sound/' + response.data.filename;
+
+                        console.debug('Přehrávám aktuální hlášku:' + response.data.filename);
+
+                        this.announcementAudio.play();
+
+                        this.dimBackground();
+
+                        setTimeout(() => {
+                            this.raiseBackground();
+                        }, 3000);
+                    }
+                })
+        },
+
+        dimBackground() {
+            console.debug('Dimming bg.');
+
+            if (this.backgroundAudio.volume > 0) {
+                setTimeout(() => {
+                    this.backgroundAudio.volume -= 0.5;
+                }, 300);
+            }
+
+        },
+
+        raiseBackground() {
+            console.debug('Raising bg.');
+
+            if (this.backgroundAudio.volume > 0) {
+                setTimeout(() => {
+                    this.backgroundAudio.volume += 0.5;
+                }, 300);
+            }
+
         },
 
         /**

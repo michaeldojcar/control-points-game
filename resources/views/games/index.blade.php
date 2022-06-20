@@ -23,8 +23,8 @@
             </table>
         </div>
         <div class="col-md-6">
-            @if(!$already_playing)
-                <a href="{{route('games.create')}}">Nová hra</a>
+            @if(!$current_game)
+                <a href="{{route('games.create')}}" class="btn btn-primary">Nová hra</a>
             @endif
         </div>
     </div>

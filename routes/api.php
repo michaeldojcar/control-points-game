@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\OperatorApiController;
+use App\Http\Controllers\ControlPointApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -27,13 +28,14 @@ Route::get('/games/{id}/playing', [OperatorApiController::class, 'gameStarted'])
 Route::get('/games/{id}/countdown', [OperatorApiController::class, 'statusCountdown']);
 Route::get('/games/{id}/finished', [OperatorApiController::class, 'statusFinished']);
 Route::get('/games/{id}/force_ended', [OperatorApiController::class, 'forceEnd']);
-// TODO:
-Route::get('/games/{id}/audio', 'ControlPointsController@getCurrentSound')->name('controlPoints.current.sound');
+Route::get('/games/{id}/audio', [OperatorApiController::class, 'getCurrentSound'])->name('controlPoints.current.sound');
 
-//
-Route::get('/api/control-points/stopGame', 'ControlPointsController@stopGame');
+Route::get('/control-points', [ControlPointApiController::class, 'controlPoints']);
+
+// Control point API
+Route::get('/control-points/{id}/capture', [ControlPointApiController::class, 'capture']);
+
+// TODO: ??
 Route::get('/api/control-points/callSwat', 'ControlPointsController@callSwat');
-Route::get('/api/game/{game_id}/ranking', 'ControlPointsController@getRank');
-Route::get('/api/game/{game_id}/points', 'ControlPointsController@getCurrentPoints');
 
 

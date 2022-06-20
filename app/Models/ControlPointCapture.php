@@ -21,7 +21,7 @@ class ControlPointCapture extends Model
 
     public function setEndOfCapture(): void
     {
-        $this->end_at = Carbon::now();
+        $this->date_to = Carbon::now();
         $this->save();
     }
 

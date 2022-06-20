@@ -5462,11 +5462,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Operator",
   data: function data() {
     return {
       game: {},
+      control_points: [],
       bg_audio: 1,
       // Music objects
       announcementAudio: null,
@@ -5499,7 +5518,12 @@ __webpack_require__.r(__webpack_exports__);
       axios.get('/api/games/' + this.game_id).then(function (response) {
         _this.game = response.data;
 
-        _this.changeAndProceedInternalState(response.data.status);
+        if (response.data.status !== _this.internal_state) {
+          _this.changeAndProceedInternalState(response.data.status);
+        }
+      });
+      axios.get('/api/control-points').then(function (response) {
+        _this.control_points = response.data;
       });
     },
     changeAndProceedInternalState: function changeAndProceedInternalState(state) {
@@ -5567,34 +5591,39 @@ __webpack_require__.r(__webpack_exports__);
 
         _this3.changeAndProceedInternalState('playing');
 
-        setInterval(function () {// TODO: Announcement
-        }, 3000);
         return true;
       }, 43068);
     },
     statusPlaying: function statusPlaying() {
+      var _this4 = this;
+
       this.playBackground();
 
       if (this.timer === null) {
         this.startTimerByServerStart();
       }
+
+      setInterval(function () {
+        // Přehrávání hlášek
+        _this4.playCurrentAnnouncement();
+      }, 3000);
     },
     statusCountdown: function statusCountdown() {
-      var _this4 = this;
+      var _this5 = this;
 
       this.playEndCountdown();
       this.startEndTimer();
 
       if (!this.backgroundAudio.paused) {
         setTimeout(function () {
-          _this4.fadeOutBackground();
+          _this5.fadeOutBackground();
         }, 200);
       }
 
       setTimeout(function () {
-        _this4.sendStatusToServer('finished');
+        _this5.sendStatusToServer('finished');
 
-        _this4.changeAndProceedInternalState('finished');
+        _this5.changeAndProceedInternalState('finished');
       }, 120035);
     },
 
@@ -5616,45 +5645,87 @@ __webpack_require__.r(__webpack_exports__);
       this.endCountdownAudio.play();
     },
     fadeOutBackground: function fadeOutBackground() {
-      var _this5 = this;
+      var _this6 = this;
 
       setInterval(function () {
-        if (_this5.backgroundAudio.volume > 0.2) {
-          _this5.backgroundAudio.volume -= 0.1;
+        if (_this6.backgroundAudio.volume > 0.2) {
+          _this6.backgroundAudio.volume -= 0.1;
         } else {
-          _this5.backgroundAudio.pause();
+          _this6.backgroundAudio.pause();
         }
       }, 50);
+    },
+    playCurrentAnnouncement: function playCurrentAnnouncement() {
+      var _this7 = this;
+
+      axios.get('/api/games/' + this.game_id + '/audio').then(function (response) {
+        if (!response.data) {
+          console.debug('Žádná hláška k přehrání.');
+        } else {
+          _this7.announcementAudio.src = '/sound/' + response.data.filename;
+          console.debug('Přehrávám aktuální hlášku:' + response.data.filename);
+
+          _this7.announcementAudio.play();
+
+          _this7.dimBackground();
+
+          setTimeout(function () {
+            _this7.raiseBackground();
+          }, 3000);
+        }
+      });
+    },
+    dimBackground: function dimBackground() {
+      var _this8 = this;
+
+      console.debug('Dimming bg.');
+
+      if (this.backgroundAudio.volume > 0) {
+        setTimeout(function () {
+          _this8.backgroundAudio.volume -= 0.5;
+        }, 300);
+      }
+    },
+    raiseBackground: function raiseBackground() {
+      var _this9 = this;
+
+      console.debug('Raising bg.');
+
+      if (this.backgroundAudio.volume > 0) {
+        setTimeout(function () {
+          _this9.backgroundAudio.volume += 0.5;
+        }, 300);
+      }
     },
 
     /**
      * Timer methods.
      */
     startTimer: function startTimer() {
-      var _this6 = this;
+      var _this10 = this;
 
       this.timer = -43;
       this.timer_interval = setInterval(function () {
-        _this6.timer = _this6.timer + 1;
+        _this10.timer = _this10.timer + 1;
       }, 1000);
     },
     startTimerByServerStart: function startTimerByServerStart() {
-      var _this7 = this;
+      var _this11 = this;
 
       this.timer = this.game.seconds_elapsed;
       this.timer_interval = setInterval(function () {
-        _this7.timer = _this7.timer + 1;
+        _this11.timer = _this11.timer + 1;
       }, 1000);
     },
     startEndTimer: function startEndTimer() {
-      var _this8 = this;
+      var _this12 = this;
 
       this.end_countdown = 120;
       this.end_countdown_interval = setInterval(function () {
-        _this8.end_countdown = _this8.end_countdown - 1;
+        _this12.end_countdown = _this12.end_countdown - 1;
 
-        if (_this8.end_countdown === 0) {
-          clearInterval(_this8.end_countdown_interval);
+        if (_this12.end_countdown === 0) {
+          clearInterval(_this12.end_countdown_interval);
         }
       }, 1000);
     },
@@ -5663,10 +5734,10 @@ __webpack_require__.r(__webpack_exports__);
      * API state callbacks.
      */
     sendStatusToServer: function sendStatusToServer(state) {
-      var _this9 = this;
+      var _this13 = this;
 
       return axios.get('/api/games/' + this.game_id + '/' + state).then(function (response) {
-        _this9.game = response.data;
+        _this13.game = response.data;
       });
     }
   }
@@ -28344,13 +28415,7 @@ var render = function () {
         : _vm._e(),
       _vm._v(" "),
       _vm.internal_state === "finished"
-        ? _c("div", [
-            _c("p", [_vm._v(_vm._s(_vm.game.seconds_elapsed))]),
-            _vm._v(" "),
-            _c("h5", [_vm._v("Skóre")]),
-            _vm._v(" "),
-            _vm._m(0),
-          ])
+        ? _c("div", [_c("h5", [_vm._v("Skóre")]), _vm._v(" "), _vm._m(0)])
         : _vm._e(),
     ]),
     _vm._v(" "),
@@ -28438,11 +28503,41 @@ var render = function () {
               ])
             : _vm._e(),
           _vm._v(" "),
+          _vm.internal_state === "finished"
+            ? _c("div", [
+                _c("a", { attrs: { href: "/" } }, [
+                  _vm._v("Návrat na seznam her"),
+                ]),
+              ])
+            : _vm._e(),
+          _vm._v(" "),
           _vm.game.status !== "force_ended" && _vm.game.status !== "finished"
             ? _c("a", { on: { click: _vm.forceQuitGame } }, [
                 _vm._v("Vynutit ukončení hry"),
               ])
             : _vm._e(),
+        ]),
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "card mt-3" }, [
+        _c("div", { staticClass: "card-header" }, [
+          _vm._v("\n                Kontrolní body\n            "),
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "card-body" }, [
+          _c("table", { staticClass: "table table-bordered" }, [
+            _c(
+              "tbody",
+              _vm._l(_vm.control_points, function (point) {
+                return _c("tr", [
+                  _c("td", [_vm._v(_vm._s(point.name))]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(point.ownerName || "-"))]),
+                ])
+              }),
+              0
+            ),
+          ]),
         ]),
       ]),
     ]),

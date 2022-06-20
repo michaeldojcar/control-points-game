@@ -18,12 +18,11 @@ class GameController extends Controller
      */
     public function index(): View|Factory|Application
     {
-        $already_playing = !Game::where('status', '=', Game::STATUS_FINISHED)
-            ->orWhere('status', '=', Game::STATUS_FORCE_EXITED)->count();
+
 
         return view('games.index', [
             'games'           => Game::latest()->get(),
-            'already_playing' => $already_playing,
+            'current_game' => Game::getCurrentGame(),
         ]);
     }
 

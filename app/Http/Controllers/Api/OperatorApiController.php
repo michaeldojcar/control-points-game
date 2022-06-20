@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\ControlPoint;
 use App\Models\Game;
+use App\Models\Sound;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -26,10 +28,11 @@ class OperatorApiController extends Controller
         return $game;
     }
 
+
     public function gameStarted($id)
     {
-        $game         = Game::findOrFail($id);
-        $game->status = Game::STATUS_PLAYING;
+        $game             = Game::findOrFail($id);
+        $game->status     = Game::STATUS_PLAYING;
         $game->started_at = Carbon::now();
         $game->save();
 
@@ -46,10 +49,11 @@ class OperatorApiController extends Controller
         return $game;
     }
 
+
     public function statusFinished($id)
     {
-        $game         = Game::findOrFail($id);
-        $game->status = Game::STATUS_FINISHED;
+        $game              = Game::findOrFail($id);
+        $game->status      = Game::STATUS_FINISHED;
         $game->finished_at = Carbon::now();
         $game->save();
 
@@ -59,11 +63,30 @@ class OperatorApiController extends Controller
 
     public function forceEnd($id)
     {
-        $game         = Game::findOrFail($id);
-        $game->status = Game::STATUS_FORCE_EXITED;
+        $game              = Game::findOrFail($id);
+        $game->status      = Game::STATUS_FORCE_EXITED;
         $game->finished_at = Carbon::now();
         $game->save();
 
         return $game;
+    }
+
+
+    public function getCurrentSound($id)
+    {
+        $sound = Sound::where('game_id', Game::findOrFail($id)->id)
+            ->where('played', false)
+            ->oldest()
+            ->first();
+
+        if ( ! $sound)
+        {
+            return null;
+        }
+
+        $sound->played = true;
+        $sound->save();
+
+        return $sound;
     }
 }
