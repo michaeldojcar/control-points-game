@@ -10,12 +10,16 @@
     <meta name="csrf-token"
           content="{{ csrf_token() }}">
 
+    <meta name="theme-color" content="#000000"
+          media="(prefers-color-scheme: dark)">
+
     <title>Kontrolní body - řízení hry</title>
 
     <!-- Styles -->
     <link href="{{asset('css/app.css')}}"
           rel="stylesheet"
           type="text/css">
+
 </head>
 <body>
     <div id="app">

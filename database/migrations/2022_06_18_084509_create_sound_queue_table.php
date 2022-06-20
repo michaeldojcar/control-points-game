@@ -15,8 +15,9 @@ return new class extends Migration {
         Schema::create('sound_queue', function (Blueprint $table)
         {
             $table->id();
+            $table->unsignedInteger('game_id');
             $table->string('filename');
-            $table->boolean('played');
+            $table->boolean('played')->default(false);
             $table->timestamps();
         });
     }

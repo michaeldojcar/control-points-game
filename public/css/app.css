@@ -1745,7 +1745,7 @@ progress {
   margin-bottom: 1rem;
   color: lime;
   vertical-align: top;
-  border-color: #dee2e6;
+  border-color: lime;
 }
 .table > :not(caption) > * > * {
   padding: 0.5rem 0.5rem;

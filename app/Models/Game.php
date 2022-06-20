@@ -57,7 +57,7 @@ class Game extends Model
         }
         if ($this->status == self::STATUS_FINISHED)
         {
-            return 'ukončena';
+            return 'ukončeno';
         }
         if ($this->status == self::STATUS_FORCE_EXITED)
         {

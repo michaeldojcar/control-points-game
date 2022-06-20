@@ -13,14 +13,42 @@
                 Do začátku hry: {{ timer }} s
             </div>
 
-            <div v-if="internal_state === 'playing'"
-                 style="font-size: 40px">
-                Čas hry: {{ timer }} s
+            <div class="card"
+                 v-if="internal_state === 'playing'">
+                <div class="card-body">
+                    <div style="font-size: 40px">
+                        Čas hry: {{ timer }} s
+                    </div>
+                </div>
             </div>
 
-            <div v-if="internal_state === 'countdown'"
-                 style="font-size: 40px">
-                Čas hry: {{ timer }} s
+
+            <div class="card"
+                 v-if="internal_state === 'countdown'">
+                <div class="card-body">
+                    <div>
+                        Čas hry: {{ timer }} s
+                    </div>
+                    <div style="font-size: 40px">
+                        Odpočet: {{ end_countdown }} s
+                    </div>
+                </div>
+            </div>
+
+
+            <div v-if="internal_state === 'finished'">
+                <p>{{game.seconds_elapsed,}}</p>
+
+                <h5>Skóre</h5>
+                <table class="table table-bordered">
+                    <tbody>
+                    <tr>
+                        <td style="width: 30px">1.</td>
+                        <td>Alfa</td>
+                        <td>17:23</td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
         <div class="col-md-4">
@@ -54,9 +82,8 @@
                         </div>
                     </div>
 
-                    <hr>
                     <a @click="forceQuitGame"
-                       v-if="game.status !== 'force_ended'">Vynutit ukončení hry</a>
+                       v-if="game.status !== 'force_ended' && game.status !== 'finished'">Vynutit ukončení hry</a>
 
 
                 </div>
@@ -80,8 +107,11 @@ export default {
             backgroundAudio: null,
             endCountdownAudio: null,
 
+            // Timers
             timer: null,
             timer_interval: null,
+            end_countdown: null,
+            end_countdown_interval: null,
 
             internal_state: 'loading'
         }
@@ -166,10 +196,10 @@ export default {
         },
 
         forceQuitGame() {
-            confirm('Opravdu chcete ukončit tuto sehrávku? Sehrávka bude zastavena okamžitě a bez odpočtu.')
-
-            this.sendStatusToServer('force_ended')
-            this.changeAndProceedInternalState('force_ended')
+            if (confirm('Opravdu chcete ukončit tuto sehrávku? Sehrávka bude zastavena okamžitě a bez odpočtu.')) {
+                this.sendStatusToServer('force_ended')
+                this.changeAndProceedInternalState('force_ended')
+            }
         },
 
 
@@ -204,6 +234,7 @@ export default {
 
         statusCountdown() {
             this.playEndCountdown()
+            this.startEndTimer()
 
             if (!this.backgroundAudio.paused) {
                 setTimeout(() => {
@@ -269,6 +300,18 @@ export default {
 
             this.timer_interval = setInterval(() => {
                 this.timer = this.timer + 1;
+            }, 1000);
+        },
+
+        startEndTimer() {
+            this.end_countdown = 120;
+
+            this.end_countdown_interval = setInterval(() => {
+                this.end_countdown = this.end_countdown - 1;
+
+                if (this.end_countdown === 0) {
+                    clearInterval(this.end_countdown_interval)
+                }
             }, 1000);
         },
 
