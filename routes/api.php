@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\OperatorApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+/*
+ * Note: there is no security layer on any routes.
+ * Everything is unauthenticated.
+ */
+
+// Game admin
+Route::get('/games/{id}', [OperatorApiController::class, 'show']);
+Route::get('/games/{id}/preparing', [OperatorApiController::class, 'startPreparingGame']);
+Route::get('/games/{id}/playing', [OperatorApiController::class, 'gameStarted']);
+Route::get('/games/{id}/countdown', [OperatorApiController::class, 'statusCountdown']);
+Route::get('/games/{id}/finished', [OperatorApiController::class, 'statusFinished']);
+Route::get('/games/{id}/force_ended', [OperatorApiController::class, 'forceEnd']);
+
+
+Route::get('/api/control-points/stopGame', 'ControlPointsController@stopGame');
+Route::get('/api/control-points/callSwat', 'ControlPointsController@callSwat');
+Route::get('/api/game/{game_id}/ranking', 'ControlPointsController@getRank');
+Route::get('/api/game/{game_id}/points', 'ControlPointsController@getCurrentPoints');
+
+// Audio queue (game admin)
+Route::get('/api/audio', 'ControlPointsController@getCurrentSound')->name('controlPoints.current.sound');
+

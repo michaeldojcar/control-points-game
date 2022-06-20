@@ -10,25 +10,27 @@
     <meta name="csrf-token"
           content="{{ csrf_token() }}">
 
-    <title>Kontrolní body</title>
+    <title>Kontrolní body - řízení hry</title>
 
     <!-- Styles -->
     <link href="{{asset('css/app.css')}}"
           rel="stylesheet"
           type="text/css">
+</head>
+<body>
+    <div id="app">
+        <div class="container mt-5">
+            <div class="page-header">
+                <a href="/"><h1>Kontrolní body</h1></a>
+            </div>
+
+            @yield('content')
+
+        </div>
+    </div>
 
     <script src="{{asset('js/app.js')}}"></script>
 
     @yield('scripts')
-</head>
-<body>
-    <div class="container">
-        <div class="page-header">
-            <a href="/"><h1>Řízení hry</h1></a>
-        </div>
-
-        @yield('content')
-
-    </div>
 </body>
 </html>

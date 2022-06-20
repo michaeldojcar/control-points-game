@@ -6,3 +6,8 @@
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+
+.page-header {
+    border-bottom: lime solid 1px;
+    margin-bottom: 30px;
+}
