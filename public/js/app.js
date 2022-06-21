@@ -5480,6 +5480,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Operator",
   data: function data() {
@@ -28503,7 +28504,7 @@ var render = function () {
               ])
             : _vm._e(),
           _vm._v(" "),
-          _vm.internal_state === "finished"
+          _vm.game.status === "force_ended" || _vm.game.status === "finished"
             ? _c("div", [
                 _c("a", { attrs: { href: "/" } }, [
                   _vm._v("Návrat na seznam her"),
@@ -28512,8 +28513,12 @@ var render = function () {
             : _vm._e(),
           _vm._v(" "),
           _vm.game.status !== "force_ended" && _vm.game.status !== "finished"
-            ? _c("a", { on: { click: _vm.forceQuitGame } }, [
-                _vm._v("Vynutit ukončení hry"),
+            ? _c("div", [
+                _c("hr"),
+                _vm._v(" "),
+                _c("a", { on: { click: _vm.forceQuitGame } }, [
+                  _vm._v("Vynutit ukončení hry"),
+                ]),
               ])
             : _vm._e(),
         ]),

@@ -80,13 +80,14 @@
                         </div>
                     </div>
 
-                    <div v-if="internal_state === 'finished'">
+                    <div v-if="game.status === 'force_ended' || game.status === 'finished'">
                         <a href="/">Návrat na seznam her</a>
                     </div>
 
-                    <a @click="forceQuitGame"
-                       v-if="game.status !== 'force_ended' && game.status !== 'finished'">Vynutit ukončení hry</a>
-
+                    <div v-if="game.status !== 'force_ended' && game.status !== 'finished'">
+                    <hr>
+                    <a @click="forceQuitGame">Vynutit ukončení hry</a>
+                    </div>
 
                 </div>
             </div>

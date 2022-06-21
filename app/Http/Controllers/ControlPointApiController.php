@@ -31,14 +31,15 @@ class ControlPointApiController extends Controller
      */
     public function capture($id, Request $request)
     {
-        // Load data
-        $game  = Game::getCurrentGame();
-        $point = ControlPoint::findOrFail($id);
-        $rfid  = $request->input('rfid');
-        //$player  = Player::where('rfid', $rfid)->firstOrFail();
+        $request->validate([
+            'rfid' => 'required',
+        ]);
 
-        // TODO: debug
-        $player = Player::first();
+        // Load data
+        $game   = Game::getCurrentGame();
+        $point  = ControlPoint::findOrFail($id);
+        $rfid   = $request->input('rfid');
+        $player = Player::where('rfid', $rfid)->firstOrFail();
 
         if ( ! $game)
         {
@@ -51,7 +52,6 @@ class ControlPointApiController extends Controller
 
         if ($last)
         {
-
             $this->validateTeamIsNotSame($last, $player->team);
 
             $last->setEndOfCapture();
@@ -104,7 +104,7 @@ class ControlPointApiController extends Controller
     {
         if ($game->status != Game::STATUS_PLAYING)
         {
-            throw new ControlPointApiException('There is no game in playing state.');
+            throw new ControlPointApiException('Current game is not in playing state.');
         }
     }
 }

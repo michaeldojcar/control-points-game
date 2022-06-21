@@ -21,7 +21,6 @@ class ControlPointSeeder extends Seeder
         $this->factoryControlPoint('Bod D');
         $this->factoryControlPoint('Bod E');
         $this->factoryControlPoint('Bod F');
-        $this->factoryControlPoint('Bod G');
     }
 
 
