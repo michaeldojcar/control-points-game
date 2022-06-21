@@ -12,8 +12,6 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class GameControllerLegacy extends Controller
 {
-
-
     /**
      * Admin dashboard.
      */
