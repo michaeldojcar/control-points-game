@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\ControlPointApiException;
 use App\Models\ControlPoint;
 use App\Models\ControlPointCapture;
 use App\Models\Game;
@@ -39,12 +40,19 @@ class ControlPointApiController extends Controller
         // TODO: debug
         $player = Player::first();
 
+        if ( ! $game)
+        {
+            throw new ControlPointApiException('There is no running game.');
+        }
+        $this->validateGameState($game);
+
         /** @var ControlPointCapture $last */
         $last = $point->getLastCaptureAttribute();
 
         if ($last)
         {
-          //  $this->validateTeamIsNotSame($last, $player->team);
+
+            $this->validateTeamIsNotSame($last, $player->team);
 
             $last->setEndOfCapture();
         }
@@ -71,7 +79,7 @@ class ControlPointApiController extends Controller
     {
         if ($last->team->id == $team->id)
         {
-            throw new \Exception('Team is same.');
+            throw new ControlPointApiException('Team is same.');
         }
     }
 
@@ -86,5 +94,17 @@ class ControlPointApiController extends Controller
         $sound->game_id  = $game->id;
         $sound->filename = $path;
         $sound->save();
+    }
+
+
+    /**
+     * @throws ControlPointApiException
+     */
+    private function validateGameState(Game $game)
+    {
+        if ($game->status != Game::STATUS_PLAYING)
+        {
+            throw new ControlPointApiException('There is no game in playing state.');
+        }
     }
 }
