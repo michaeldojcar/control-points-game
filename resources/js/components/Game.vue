@@ -37,7 +37,7 @@
 
 
             <div v-if="internal_state === 'finished'">
-                <h5>Skóre</h5>
+
                 <table class="table table-bordered">
                     <tbody>
                     <tr>
@@ -47,6 +47,26 @@
                     </tr>
                     </tbody>
                 </table>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-header">Žebříček týmů</div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <td>Tým</td>
+                            <td>Doba záběru</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="team in teams">
+                            <td>{{ team.name }}</td>
+                            <td>{{ team.seconds }} s</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
         <div class="col-md-4">
@@ -85,8 +105,8 @@
                     </div>
 
                     <div v-if="game.status !== 'force_ended' && game.status !== 'finished'">
-                    <hr>
-                    <a @click="forceQuitGame">Vynutit ukončení hry</a>
+                        <hr>
+                        <a @click="forceQuitGame">Vynutit ukončení hry</a>
                     </div>
 
                 </div>
@@ -119,6 +139,7 @@ export default {
         return {
             game: {},
             control_points: [],
+            teams: [],
             bg_audio: 1,
 
             // Music objects
@@ -169,6 +190,11 @@ export default {
             axios.get('/api/control-points')
                 .then(response => {
                     this.control_points = response.data
+                })
+
+            axios.get('/api/games/' + this.game_id + '/teams')
+                .then(response => {
+                    this.teams = response.data
                 })
         },
 

@@ -1,17 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Exceptions\ControlPointApiException;
+use App\Http\Controllers\Controller;
 use App\Models\ControlPoint;
 use App\Models\ControlPointCapture;
 use App\Models\Game;
 use App\Models\Player;
 use App\Models\Sound;
 use App\Models\Team;
-use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 class ControlPointApiController extends Controller

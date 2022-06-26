@@ -1,8 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\ControlPointApiController;
 use App\Http\Controllers\Api\OperatorApiController;
-use App\Http\Controllers\ControlPointApiController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,6 +28,7 @@ Route::get('/games/{id}/countdown', [OperatorApiController::class, 'statusCountd
 Route::get('/games/{id}/finished', [OperatorApiController::class, 'statusFinished']);
 Route::get('/games/{id}/force_ended', [OperatorApiController::class, 'forceEnd']);
 Route::get('/games/{id}/audio', [OperatorApiController::class, 'getCurrentSound'])->name('controlPoints.current.sound');
+Route::get('/games/{id}/teams', [OperatorApiController::class, 'teams']);
 
 Route::get('/control-points', [ControlPointApiController::class, 'controlPoints']);
 

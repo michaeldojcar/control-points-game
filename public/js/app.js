@@ -5481,12 +5481,33 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Operator",
   data: function data() {
     return {
       game: {},
       control_points: [],
+      teams: [],
       bg_audio: 1,
       // Music objects
       announcementAudio: null,
@@ -5525,6 +5546,9 @@ __webpack_require__.r(__webpack_exports__);
       });
       axios.get('/api/control-points').then(function (response) {
         _this.control_points = response.data;
+      });
+      axios.get('/api/games/' + this.game_id + '/teams').then(function (response) {
+        _this.teams = response.data;
       });
     },
     changeAndProceedInternalState: function changeAndProceedInternalState(state) {
@@ -28415,9 +28439,29 @@ var render = function () {
           ])
         : _vm._e(),
       _vm._v(" "),
-      _vm.internal_state === "finished"
-        ? _c("div", [_c("h5", [_vm._v("Skóre")]), _vm._v(" "), _vm._m(0)])
-        : _vm._e(),
+      _vm.internal_state === "finished" ? _c("div", [_vm._m(0)]) : _vm._e(),
+      _vm._v(" "),
+      _c("div", { staticClass: "card mt-3" }, [
+        _c("div", { staticClass: "card-header" }, [_vm._v("Žebříček týmů")]),
+        _vm._v(" "),
+        _c("div", { staticClass: "card-body" }, [
+          _c("table", { staticClass: "table table-bordered" }, [
+            _vm._m(1),
+            _vm._v(" "),
+            _c(
+              "tbody",
+              _vm._l(_vm.teams, function (team) {
+                return _c("tr", [
+                  _c("td", [_vm._v(_vm._s(team.name))]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(team.seconds) + " s")]),
+                ])
+              }),
+              0
+            ),
+          ]),
+        ]),
+      ]),
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "col-md-4" }, [
@@ -28562,6 +28606,18 @@ var staticRenderFns = [
           _vm._v(" "),
           _c("td", [_vm._v("17:23")]),
         ]),
+      ]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("td", [_vm._v("Tým")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("Doba záběru")]),
       ]),
     ])
   },

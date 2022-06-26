@@ -20,7 +20,9 @@ class TeamSeeder extends Seeder
         $team = $this->createTeam('Alfa');
         $this->createPlayer('name', $team);
 
-        $this->createTeam('Beta');
+        $team = $this->createTeam('Beta');
+        $this->createPlayer('name', $team);
+
         $this->createTeam('Gamma');
         $this->createTeam('Delta');
         $this->createTeam('Epsilon');
@@ -44,7 +46,7 @@ class TeamSeeder extends Seeder
         $player          = new Player();
         $player->name    = $name;
         $player->team_id = $team->id;
-        $player->rfid    = '1';
+        $player->rfid    = $team->id;
         $player->save();
     }
 }

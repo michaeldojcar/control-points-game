@@ -13,7 +13,8 @@ class CreateControlPointCapturesTable extends Migration
      */
     public function up()
     {
-        Schema::create('control_point_captures', function (Blueprint $table) {
+        Schema::create('control_point_captures', function (Blueprint $table)
+        {
             $table->increments('id');
             $table->integer('user_id');
             $table->unsignedInteger('team_id');
@@ -21,9 +22,11 @@ class CreateControlPointCapturesTable extends Migration
             $table->unsignedInteger('control_point_id');
             $table->dateTime('date_from');
             $table->dateTime('date_to')->nullable();
+            $table->unsignedInteger('seconds')->nullable();
             $table->timestamps();
         });
     }
+
 
     /**
      * Reverse the migrations.

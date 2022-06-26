@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * App\Models\Team
  *
- * @property int $id
- * @property string $name
+ * @property int                             $id
+ * @property string                          $name
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|Team newModelQuery()
@@ -23,5 +23,10 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Team extends Model
 {
-    use HasFactory;
+    public function getCapturedSeconds(Game $game)
+    {
+        return ControlPointCapture::where('game_id', $game->id)
+            ->where('team_id', $this->id)
+            ->sum('seconds');
+    }
 }

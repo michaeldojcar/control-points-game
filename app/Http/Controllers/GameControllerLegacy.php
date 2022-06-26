@@ -257,7 +257,9 @@ class GameControllerLegacy extends Controller
 
     private function getGroupCaptureSeconds($game_id, $group_id)
     {
-        $captures = ControlPointCapture::where('group_id', $group_id)->where('game_id', $game_id)->get();
+        $captures = ControlPointCapture::where('group_id', $group_id)
+            ->where('game_id', $game_id)
+            ->get();
 
         $secs = 0;
         foreach ($captures as $capture)

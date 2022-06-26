@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\GameController;
+use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,3 +22,5 @@ Route::get('/', function ()
 });
 
 Route::resource('/games', GameController::class);
+
+Route::get('/test', [TestController::class, 'dashboard']);

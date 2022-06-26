@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ControlPoint;
 use App\Models\Game;
 use App\Models\Sound;
+use App\Models\Team;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -16,6 +17,20 @@ class OperatorApiController extends Controller
         $game = Game::findOrFail($id);
 
         return $game;
+    }
+
+
+    public function teams($game_id)
+    {
+        $game  = Game::findOrFail($game_id);
+        $teams = Team::all();
+
+        foreach ($teams as $team)
+        {
+            $team->seconds = (int)$team->getCapturedSeconds($game);
+        }
+
+        return $teams;
     }
 
 
@@ -57,6 +72,8 @@ class OperatorApiController extends Controller
         $game->finished_at = Carbon::now();
         $game->save();
 
+        // TODO: close pending captures
+
         return $game;
     }
 
@@ -67,6 +84,8 @@ class OperatorApiController extends Controller
         $game->status      = Game::STATUS_FORCE_EXITED;
         $game->finished_at = Carbon::now();
         $game->save();
+
+        // TODO: close pending captures
 
         return $game;
     }

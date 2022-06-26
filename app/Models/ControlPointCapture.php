@@ -10,16 +10,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * App\Models\ControlPointCapture
  *
- * @property int $id
- * @property int $user_id
- * @property int $team_id
- * @property int $game_id
- * @property int $control_point_id
- * @property \Illuminate\Support\Carbon $date_from
+ * @property int                             $id
+ * @property int                             $user_id
+ * @property int                             $team_id
+ * @property int                             $game_id
+ * @property int                             $control_point_id
+ * @property \Illuminate\Support\Carbon      $date_from
  * @property \Illuminate\Support\Carbon|null $date_to
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Team|null $team
+ * @property-read \App\Models\Team|null      $team
  * @method static \Illuminate\Database\Eloquent\Builder|ControlPointCapture newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ControlPointCapture newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ControlPointCapture query()
@@ -49,6 +49,7 @@ class ControlPointCapture extends Model
     public function setEndOfCapture(): void
     {
         $this->date_to = Carbon::now();
+        $this->seconds = $this->date_to->diffInSeconds($this->date_from);
         $this->save();
     }
 
