@@ -25,12 +25,14 @@ class OperatorApiController extends Controller
         $game  = Game::findOrFail($game_id);
         $teams = Team::all();
 
-        foreach ($teams as $team)
+        $team_collection = collect($teams);
+
+        foreach ($team_collection as $team)
         {
             $team->seconds = (int)$team->getCapturedSeconds($game);
         }
 
-        return $teams;
+        return $team_collection->sortByDesc('seconds')->values();
     }
 
 
