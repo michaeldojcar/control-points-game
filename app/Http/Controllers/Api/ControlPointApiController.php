@@ -35,9 +35,13 @@ class ControlPointApiController extends Controller
         ]);
 
         // Load data
-        $game   = Game::getCurrentGame();
-        $point  = ControlPoint::findOrFail($id);
-        $rfid   = $request->input('rfid');
+        $game  = Game::getCurrentGame();
+        $point = ControlPoint::findOrFail($id);
+
+        // RFID
+        $rfid = $request->input('rfid');
+        $rfid = $this->convertAsciiToRfid($rfid);
+
         $player = Player::where('rfid', $rfid)->firstOrFail();
 
         if ( ! $game)
@@ -68,6 +72,18 @@ class ControlPointApiController extends Controller
         $this->playCaptureSound($player->team, $point, $game);
 
         return $capture;
+    }
+
+
+    private function convertAsciiToRfid($code): string
+    {
+        $code = substr($code, 1, -1);
+        $code = chunk_split($code, 2, ' ');
+
+        $ascii  = $this->parseAsciiToHex($code);
+        $substr = substr($ascii, 2, -2);
+
+        return sprintf('%010d', hexdec($substr));
     }
 
 
