@@ -36,19 +36,6 @@
             </div>
 
 
-            <div v-if="internal_state === 'finished'">
-
-                <table class="table table-bordered">
-                    <tbody>
-                    <tr>
-                        <td style="width: 30px">1.</td>
-                        <td>Alfa</td>
-                        <td>17:23</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-
             <div class="card mt-3">
                 <div class="card-header">Žebříček týmů</div>
                 <div class="card-body">
@@ -283,6 +270,18 @@ export default {
             setInterval(() => {
                 // Přehrávání hlášek
                 this.playCurrentAnnouncement();
+            }, 3000);
+
+            setInterval(() => {
+                axios.get('/api/control-points')
+                    .then(response => {
+                        this.control_points = response.data
+                    })
+
+                axios.get('/api/games/' + this.game_id + '/teams')
+                    .then(response => {
+                        this.teams = response.data
+                    })
             }, 3000);
         },
 

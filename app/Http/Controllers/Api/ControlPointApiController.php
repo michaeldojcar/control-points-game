@@ -12,6 +12,8 @@ use App\Models\Sound;
 use App\Models\Team;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 
 class ControlPointApiController extends Controller
 {
@@ -34,6 +36,10 @@ class ControlPointApiController extends Controller
             'rfid' => 'required',
         ]);
 
+        Log::debug($request->input('rfid'));
+        Log::debug($id);
+
+
         // Load data
         $game  = Game::getCurrentGame();
         $point = ControlPoint::findOrFail($id);
@@ -41,6 +47,8 @@ class ControlPointApiController extends Controller
         // RFID
         $rfid = $request->input('rfid');
         $rfid = $this->convertAsciiToRfid($rfid);
+
+        Log::debug($request->input('rfid'));
 
         $player = Player::where('rfid', $rfid)->firstOrFail();
 
@@ -71,7 +79,9 @@ class ControlPointApiController extends Controller
 
         $this->playCaptureSound($player->team, $point, $game);
 
-        return $capture;
+
+
+        return new Response($capture, 200);
     }
 
 
@@ -84,6 +94,27 @@ class ControlPointApiController extends Controller
         $substr = substr($ascii, 2, -2);
 
         return sprintf('%010d', hexdec($substr));
+    }
+
+    /**
+     * @param $str
+     *
+     * @return string
+     */
+    private function parseAsciiToHex($str): string
+    {
+        $output = ''; // What we will return
+        $token  = strtok($str, ' '); // Initialize the tokenizer
+
+        // Loop until there are no more tokens left
+        while ($token !== false)
+        {
+            $output .= chr($token); // Add the token to the output
+            $token  = strtok(' '); // Advance the tokenizer, getting the next token
+        }
+
+        // All the tokens have been consumed, return the result!
+        return $output;
     }
 
 
@@ -117,7 +148,7 @@ class ControlPointApiController extends Controller
      */
     private function validateGameState(Game $game)
     {
-        if ($game->status != Game::STATUS_PLAYING)
+        if ($game->status != Game::STATUS_PLAYING  && $game->status != Game::STATUS_FINISH_COUNTDOWN)
         {
             throw new ControlPointApiException('Current game is not in playing state.');
         }

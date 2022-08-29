@@ -17,17 +17,7 @@ class TeamSeeder extends Seeder
      */
     public function run()
     {
-        $team = $this->createTeam('Alfa');
-        $this->createPlayer('name', $team);
 
-        $team = $this->createTeam('Beta');
-        $this->createPlayer('name', $team);
-
-        $this->createTeam('Gamma');
-        $this->createTeam('Delta');
-        $this->createTeam('Epsilon');
-        $this->createTeam('Omikron');
-        $this->createTeam('Omega');
     }
 
 

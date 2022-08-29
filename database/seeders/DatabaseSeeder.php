@@ -15,6 +15,6 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call(ControlPointSeeder::class);
-        $this->call(TeamSeeder::class);
+        //$this->call(TeamSeeder::class);
     }
 }

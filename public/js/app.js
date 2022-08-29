@@ -5488,19 +5488,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Operator",
   data: function data() {
@@ -5631,6 +5618,14 @@ __webpack_require__.r(__webpack_exports__);
       setInterval(function () {
         // Přehrávání hlášek
         _this4.playCurrentAnnouncement();
+      }, 3000);
+      setInterval(function () {
+        axios.get('/api/control-points').then(function (response) {
+          _this4.control_points = response.data;
+        });
+        axios.get('/api/games/' + _this4.game_id + '/teams').then(function (response) {
+          _this4.teams = response.data;
+        });
       }, 3000);
     },
     statusCountdown: function statusCountdown() {
@@ -28439,14 +28434,12 @@ var render = function () {
           ])
         : _vm._e(),
       _vm._v(" "),
-      _vm.internal_state === "finished" ? _c("div", [_vm._m(0)]) : _vm._e(),
-      _vm._v(" "),
       _c("div", { staticClass: "card mt-3" }, [
         _c("div", { staticClass: "card-header" }, [_vm._v("Žebříček týmů")]),
         _vm._v(" "),
         _c("div", { staticClass: "card-body" }, [
           _c("table", { staticClass: "table table-bordered" }, [
-            _vm._m(1),
+            _vm._m(0),
             _vm._v(" "),
             _c(
               "tbody",
@@ -28593,22 +28586,6 @@ var render = function () {
   ])
 }
 var staticRenderFns = [
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("table", { staticClass: "table table-bordered" }, [
-      _c("tbody", [
-        _c("tr", [
-          _c("td", { staticStyle: { width: "30px" } }, [_vm._v("1.")]),
-          _vm._v(" "),
-          _c("td", [_vm._v("Alfa")]),
-          _vm._v(" "),
-          _c("td", [_vm._v("17:23")]),
-        ]),
-      ]),
-    ])
-  },
   function () {
     var _vm = this
     var _h = _vm.$createElement

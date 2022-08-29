@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\ControlPoint;
+use App\Models\ControlPointCapture;
 use App\Models\Game;
 use App\Models\Sound;
 use App\Models\Team;
@@ -72,7 +73,14 @@ class OperatorApiController extends Controller
         $game->finished_at = Carbon::now();
         $game->save();
 
-        // TODO: close pending captures
+        $pending = ControlPointCapture::where('date_to', null)
+            ->get();
+
+        /* @var $capture ControlPointCapture */
+        foreach ($pending as $capture)
+        {
+            $capture->setEndOfCapture();
+        }
 
         return $game;
     }
@@ -85,7 +93,15 @@ class OperatorApiController extends Controller
         $game->finished_at = Carbon::now();
         $game->save();
 
-        // TODO: close pending captures
+        $pending = ControlPointCapture::where('date_to', null)
+            ->get();
+
+
+        /* @var $capture ControlPointCapture */
+        foreach ($pending as $capture)
+        {
+            $capture->setEndOfCapture();
+        }
 
         return $game;
     }
